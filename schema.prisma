@@ -241,10 +241,10 @@ model City {
 
 model Bootcamp {
   id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  firstName          String        @db.VarChar(100)
-  lastName          String        @db.VarChar(100)
+  firstName          String        @db.VarChar(30)
+  lastName          String        @db.VarChar(30)
 
-  @@map("bootcamps")
+  @@map("bootcamp")
 }
 
 model Country {

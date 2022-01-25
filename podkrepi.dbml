@@ -192,6 +192,12 @@ Table City {
   beneficiaries Beneficiary [not null]
 }
 
+Table Bootcamp {
+  id String [pk]
+  firstName String [not null]
+  lastName String [not null]
+}
+
 Table Country {
   id String [pk]
   name String [not null]

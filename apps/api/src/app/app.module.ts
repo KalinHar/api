@@ -28,6 +28,8 @@ import { KeycloakConfigService } from '../config/keycloak-config.service'
 import { PrismaClientExceptionFilter } from '../prisma/prisma-client-exception.filter'
 import { EmailService } from '../email/email.service'
 import { TemplateService } from '../email/template.service'
+import { Bootcamp } from '../bootcamp/entities/bootcamp.entity'
+import { BootcampModule } from '../bootcamp/bootcamp.module'
 @Module({
   imports: [
     ConfigModule.forRoot({ validationSchema, isGlobal: true, load: [configuration] }),
@@ -53,6 +55,7 @@ import { TemplateService } from '../email/template.service'
     BeneficiaryModule,
     CityModule,
     HealthModule,
+    BootcampModule,
   ],
   controllers: [AppController],
   providers: [
