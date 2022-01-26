@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger, NotFoundException } from '@nestjs/common'
+import { Bootcamp, Prisma } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { PrismaService } from '../prisma/prisma.service'
 import { CreateBootcampDto } from './dto/create-bootcamp.dto'
 import { UpdateBootcampDto } from './dto/update-bootcamp.dto'
@@ -12,18 +14,42 @@ export class BootcampService {
   }
 
   findAll() {
-    return `This action returns all bootcamp`
+    return this.prisma.bootcamp.findMany()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bootcamp`
+  async findOne(id: string): Promise<Bootcamp | void> {
+    const result = await this.prisma.bootcamp.findFirst({where : {id: id}})
+    if (result == null) {
+      Logger.warn('No bootcamper with ID: ' + id)
+      throw new NotFoundException('No bootcamper with ID: ' + id)
+    }
+    return result
   }
 
-  update(id: number, updateBootcampDto: UpdateBootcampDto) {
-    return `This action updates a #${id} bootcamp`
+  async update(id: string, updateBootcampDto: UpdateBootcampDto): Promise<Bootcamp | void> {
+    try {
+      const result = await this.prisma.bootcamp.update( {
+        where: { id: id},
+        data: updateBootcampDto
+      })
+      return result
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        Logger.warn('No bootcamper record with ID' + id)
+        throw new NotFoundException('No bootcamper record with ID' + id)
+      }
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} bootcamp`
+  async remove(id: string): Promise<Bootcamp | void> {
+    try {
+      const result = await this.prisma.bootcamp.delete( { where: { id: id}})
+      return result
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        Logger.warn('No bootcamper record with ID' + id)
+        throw new NotFoundException('No bootcamper record with ID' + id)
+      }
+    }
   }
 }
